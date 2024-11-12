@@ -78,5 +78,6 @@ public class PlayerCube : MonoBehaviour
         
         // Update player position so that indicator logic follows position
         playerPos = rb.position;
+        FollowCam.POI = this.gameObject;
     }
 }
