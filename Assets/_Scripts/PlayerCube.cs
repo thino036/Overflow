@@ -21,6 +21,12 @@ public class PlayerCube : MonoBehaviour
     public Vector3 playerPos;
 
     private Camera mainCam;
+
+    [Header("Air Variables")]
+    public float maxAir = 100f;
+    public float airDecreaseRate = 10f;
+    public float currentAir;
+    private bool isUnderwater = false;
     
     // Start is called before the first frame update
     void Start()
@@ -38,6 +44,8 @@ public class PlayerCube : MonoBehaviour
         indicator.SetActive(true);
 
         this.GetComponent<SphereCollider>().enabled = false;
+
+        currentAir = maxAir;
     }
 
     // Update is called once per frame
@@ -66,6 +74,19 @@ public class PlayerCube : MonoBehaviour
         {
             Instantiate(icePlatformPrefab, placementPos, Quaternion.identity);
         }
+
+        if (isUnderwater)
+        {
+            currentAir -= airDecreaseRate * Time.deltaTime;
+            currentAir = Mathf.Max(currentAir, 0);
+            
+            if(currentAir <= 0)
+            {
+                Debug.Log("Player is out of air!");
+                // Add code for when player is out of air.
+                // Decrease health I guess?
+            }
+        }
     }
 
     void FixedUpdate()
@@ -79,5 +100,22 @@ public class PlayerCube : MonoBehaviour
         // Update player position so that indicator logic follows position
         playerPos = rb.position;
         FollowCam.POI = this.gameObject;
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if(collision.CompareTag("Water"))
+        {
+            isUnderwater = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider collision)
+    {
+        if(collision.CompareTag("Water"))
+        {
+            isUnderwater = false;
+            currentAir = maxAir;
+        }
     }
 }
