@@ -116,6 +116,7 @@ public class PlayerCube : MonoBehaviour
         {
             isUnderwater = false;
             currentAir = maxAir;
+            Debug.Log("Player can breathe again!");
         }
     }
 }
