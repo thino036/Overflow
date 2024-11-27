@@ -3,10 +3,10 @@ using UnityEngine.UI;
 
 public class PlayerTracker : MonoBehaviour
 {
-    public GameObject playerCube; // Reference to the PlayerCube GameObject
-    public Text playerYLevelText; // Reference to the Text UI element for displaying Y-level
+    public GameObject playerCube;
+    public Text playerYLevelText;
 
-    private float baseYLevel = 0f; // Start Y-level at 0 explicitly
+    private float baseYLevel = 0f;
 
     void Start()
     {
@@ -21,10 +21,10 @@ public class PlayerTracker : MonoBehaviour
             // Calculate adjusted Y-level
             float adjustedYLevel = playerCube.transform.position.y - baseYLevel;
 
-            // Clamp the Y-level to always stay at or above 0
+            // Make sure y-level stays above 0
             adjustedYLevel = Mathf.Max(0, adjustedYLevel);
 
-            // Update the Text UI element
+            // Text UI element
             playerYLevelText.text = adjustedYLevel.ToString("F2") + "m";
         }
     }

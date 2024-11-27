@@ -1,23 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; // Import to use UI elements
+using UnityEngine.UI;
 
 public class Water : MonoBehaviour
 {
-    public GameObject waterPrefab; // Water object
-    public Slider waterBar;        // Slider to represent water level
-    public float speed = 1f;       // Speed of water rising
-    public float maxWaterHeight = 10f; // Maximum height of the water object
+    public GameObject waterPrefab;
+    public Slider waterBar;
+    public float speed = 1f;
+    public float maxWaterHeight = 10f;
 
-    private float currentWaterLevel = 0f; // Track the current water level
+    private float currentWaterLevel = 0f;
 
     void Start()
     {
-        // Initialize the water bar's max value
+        // SLider's starting value and range matches the water level
         if (waterBar != null)
         {
-            waterBar.maxValue = maxWaterHeight; // Match max water height
+            waterBar.maxValue = maxWaterHeight;
             waterBar.value = currentWaterLevel;
         }
     }
@@ -27,11 +27,11 @@ public class Water : MonoBehaviour
         // Increase water level
         if (currentWaterLevel < maxWaterHeight)
         {
-            currentWaterLevel += speed * Time.deltaTime; // Increase water level over time
+            currentWaterLevel += speed * Time.deltaTime;
 
             // Update the water's scale
             Vector3 scale = transform.localScale;
-            scale.y = currentWaterLevel; // Set the water's height directly
+            scale.y = currentWaterLevel;
             transform.localScale = scale;
 
             // Update the Slider value
