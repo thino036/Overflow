@@ -12,8 +12,6 @@ public class PlayerCube : MonoBehaviour
 
     private Rigidbody rb;
     private Vector3 mvmt;
-    //f = forward, l = left, r = right.
-    private char direction = 'f';
 
     [Header("Ice Platform Variables")]
     public GameObject icePlatformPrefab;
@@ -110,28 +108,20 @@ public class PlayerCube : MonoBehaviour
         playerPos = rb.position;
         FollowCam.POI = this.gameObject;
 
-        if (mvmt.x < 0 && direction != 'l')
+        //Player Rotations
+        if (mvmt.x < 0) // Rotate Left
         {
-            transform.Rotate(0, 90, 0);
-            direction = 'l';
+            transform.localEulerAngles = new Vector3(0, 90, 0);
         }
-        else if (mvmt.x > 0 && direction != 'r')
+        else if (mvmt.x > 0) // Rotate Right
         {
-            transform.Rotate(0, -90, 0);
-            direction = 'r';
+            transform.localEulerAngles = new Vector3(0, -90, 0);
         }
-        else if(mvmt.x == 0 && direction != 'f')
+        else if(mvmt.x == 0) // Face Forward
         {
-            if(direction == 'l')
-            {
-                transform.Rotate(0, -90, 0);
-            }
-            else if (direction == 'r')
-            {
-                transform.Rotate(0, 90, 0);
-            }
-            direction = 'f';
+            transform.localEulerAngles = new Vector3(0, 0, 0);
         }
+
     }
 
     private void OnTriggerEnter(Collider collision)
