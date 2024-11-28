@@ -12,6 +12,8 @@ public class PlayerCube : MonoBehaviour
 
     private Rigidbody rb;
     private Vector3 mvmt;
+    //f = forward, l = left, r = right.
+    private char direction = 'f';
 
     [Header("Ice Platform Variables")]
     public GameObject icePlatformPrefab;
@@ -107,6 +109,29 @@ public class PlayerCube : MonoBehaviour
         // Update player position so that indicator logic follows position
         playerPos = rb.position;
         FollowCam.POI = this.gameObject;
+
+        if (mvmt.x < 0 && direction != 'l')
+        {
+            transform.Rotate(0, 90, 0);
+            direction = 'l';
+        }
+        else if (mvmt.x > 0 && direction != 'r')
+        {
+            transform.Rotate(0, -90, 0);
+            direction = 'r';
+        }
+        else if(mvmt.x == 0 && direction != 'f')
+        {
+            if(direction == 'l')
+            {
+                transform.Rotate(0, -90, 0);
+            }
+            else if (direction == 'r')
+            {
+                transform.Rotate(0, 90, 0);
+            }
+            direction = 'f';
+        }
     }
 
     private void OnTriggerEnter(Collider collision)
