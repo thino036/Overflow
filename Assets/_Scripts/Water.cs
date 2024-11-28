@@ -9,8 +9,10 @@ public class Water : MonoBehaviour
     public Slider waterBar;
     public float speed = 1f;
     public float maxWaterHeight = 10f;
+    public float sliderSpeed = 0.8f;
 
     private float currentWaterLevel = 0f;
+    private float displayedWaterLevel = 0f;
 
     void Start()
     {
@@ -18,7 +20,7 @@ public class Water : MonoBehaviour
         if (waterBar != null)
         {
             waterBar.maxValue = maxWaterHeight;
-            waterBar.value = currentWaterLevel;
+            waterBar.value = displayedWaterLevel;
         }
     }
 
@@ -37,7 +39,8 @@ public class Water : MonoBehaviour
             // Update the Slider value
             if (waterBar != null)
             {
-                waterBar.value = currentWaterLevel;
+                displayedWaterLevel = Mathf.Lerp(displayedWaterLevel, currentWaterLevel, sliderSpeed * Time.deltaTime);
+                waterBar.value = displayedWaterLevel;
             }
         }
     }

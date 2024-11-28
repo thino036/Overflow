@@ -5,7 +5,7 @@ public class Oxygen : MonoBehaviour
 {
     public Slider oxygenBar; // Reference to the UI Slider for oxygen
     public float maxOxygen = 100f; // Maximum oxygen level
-    public float depletionRate = 10f; // Oxygen depletion rate per second
+    public float depletionRate = 0.01f; // Oxygen depletion rate per second
     private float currentOxygen; // Current oxygen level
 
     void Start()
