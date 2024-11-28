@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class PlayerCube : MonoBehaviour
 {
+    public LayerMask obstacleMask;
+
     [Header("Movement Variables")]
     public float HoMoveSpeed = 5f;
-    public float VeMoveSpeed = 8f;
+    public float VeMoveSpeed = 100f;
 
     private Rigidbody rb;
     private Vector3 mvmt;
@@ -52,7 +54,7 @@ public class PlayerCube : MonoBehaviour
     void Update()
     {
         mvmt.x = Input.GetAxisRaw("Horizontal");
-        mvmt.y = Input.GetAxisRaw("Vertical");
+        bool canJump = Mathf.Abs(rb.velocity.y) < 0.01f;
 
         // Display indicator
         Vector3 mousePos2D = Input.mousePosition;
@@ -70,7 +72,7 @@ public class PlayerCube : MonoBehaviour
         Vector3 placementPos = playerPos + mouseDelta;
         indicator.transform.position = placementPos;
         
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && CanPlacePlatform(placementPos, GetSize(icePlatformPrefab)))
         {
             Instantiate(icePlatformPrefab, placementPos, Quaternion.identity);
         }
@@ -87,14 +89,19 @@ public class PlayerCube : MonoBehaviour
                 // Decrease health I guess?
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.W) && canJump)
+        {
+            Jump();
+        }
     }
 
     void FixedUpdate()
     {
         Vector3 newPos = new Vector3(
             rb.position.x + mvmt.x * HoMoveSpeed * Time.fixedDeltaTime,
-            rb.position.y + mvmt.y * VeMoveSpeed * Time.fixedDeltaTime);
-
+            rb.position.y,
+            rb.position.z);
         rb.MovePosition(newPos);
         
         // Update player position so that indicator logic follows position
@@ -118,5 +125,30 @@ public class PlayerCube : MonoBehaviour
             currentAir = maxAir;
             Debug.Log("Player can breathe again!");
         }
+    }
+
+    public bool CanPlacePlatform(Vector3 pos, Vector3 platformSize)
+    {
+        Collider[] colliders = Physics.OverlapBox(pos, platformSize / 2, Quaternion.identity, obstacleMask);
+        return colliders.Length == 0;
+    }
+
+    Vector3 GetSize(GameObject prefab)
+    {
+        Renderer renderer = prefab.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            return renderer.bounds.size;
+        }
+        else
+        {
+            return Vector3.zero;
+        }
+    }
+
+    void Jump()
+    {
+        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        rb.AddForce(Vector3.up * VeMoveSpeed, ForceMode.Impulse);
     }
 }
