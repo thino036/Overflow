@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; // For UI Slider support
 
 public class PlayerCube : MonoBehaviour
 {
@@ -27,14 +28,15 @@ public class PlayerCube : MonoBehaviour
     [Header("Air Variables")]
     public float maxAir = 100f;
     public float airDecreaseRate = 10f;
+    public float airIncreaseRate = 5f;
     public float currentAir;
     private bool isUnderwater = false;
-    
-    // Start is called before the first frame update
+    public Slider oxygenSlider; // Slider for oxygen display
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        
+
         // Get main camera for converting mouse position to world position
         mainCam = Camera.main;
 
@@ -48,9 +50,15 @@ public class PlayerCube : MonoBehaviour
         this.GetComponent<SphereCollider>().enabled = false;
 
         currentAir = maxAir;
+
+        // Initialize oxygen slider
+        if (oxygenSlider != null)
+        {
+            oxygenSlider.maxValue = maxAir;
+            oxygenSlider.value = currentAir;
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         mvmt.x = Input.GetAxisRaw("Horizontal");
@@ -71,22 +79,38 @@ public class PlayerCube : MonoBehaviour
         }
         Vector3 placementPos = playerPos + mouseDelta;
         indicator.transform.position = placementPos;
-        
+
         if (Input.GetMouseButtonDown(0) && CanPlacePlatform(placementPos, GetSize(icePlatformPrefab)))
         {
             Instantiate(icePlatformPrefab, placementPos, Quaternion.identity);
         }
 
+        // Handle oxygen decrease or increase
         if (isUnderwater)
         {
             currentAir -= airDecreaseRate * Time.deltaTime;
-            currentAir = Mathf.Max(currentAir, 0);
-            
-            if(currentAir <= 0)
+            currentAir = Mathf.Max(currentAir, 0); // Clamp to 0
+
+            if (oxygenSlider != null)
+            {
+                oxygenSlider.value = currentAir; // Update slider
+            }
+
+            if (currentAir <= 0)
             {
                 Debug.Log("Player is out of air!");
-                // Add code for when player is out of air.
-                // Decrease health I guess?
+                // Add code for when the player is out of air (e.g., decrease health)
+            }
+        }
+        else
+        {
+            // Replenish oxygen when out of water
+            currentAir += airIncreaseRate * Time.deltaTime;
+            currentAir = Mathf.Min(currentAir, maxAir); // Clamp to maxAir
+
+            if (oxygenSlider != null)
+            {
+                oxygenSlider.value = currentAir; // Update slider
             }
         }
 
@@ -103,7 +127,7 @@ public class PlayerCube : MonoBehaviour
             rb.position.y,
             rb.position.z);
         rb.MovePosition(newPos);
-        
+
         // Update player position so that indicator logic follows position
         playerPos = rb.position;
         FollowCam.POI = this.gameObject;
@@ -126,19 +150,23 @@ public class PlayerCube : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if(collision.CompareTag("Water"))
+        Debug.Log($"Entered Trigger: {collision.name}");
+
+        if (collision.CompareTag("Water"))
         {
             isUnderwater = true;
+            Debug.Log("Player is underwater.");
         }
     }
 
     private void OnTriggerExit(Collider collision)
     {
-        if(collision.CompareTag("Water"))
+        Debug.Log($"Exited Trigger: {collision.name}");
+
+        if (collision.CompareTag("Water"))
         {
             isUnderwater = false;
-            currentAir = maxAir;
-            Debug.Log("Player can breathe again!");
+            Debug.Log("Player exited water.");
         }
     }
 
