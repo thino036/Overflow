@@ -20,6 +20,8 @@ public class PlayerCube : MonoBehaviour
     public GameObject indicatorPrefab;              // Indicator prefab.
     [Tooltip("Distance to spawn ice platform.")]
     public float spawnDistance = 10f;               // Distance ice platform will spawn.
+    [Tooltip("Audio Source for ice platform placing sound.")]
+    public AudioSource iceSound;
 
     [Header("Dynamic")]
     public GameObject indicator;                    // For indicator prefab.
@@ -93,6 +95,7 @@ public class PlayerCube : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && CanPlacePlatform(placementPos, GetSize(icePlatformPrefab)))
         {
             Instantiate(icePlatformPrefab, placementPos, Quaternion.identity);
+            iceSound.Play();
         }
 
         // Handle oxygen decrease or increase
