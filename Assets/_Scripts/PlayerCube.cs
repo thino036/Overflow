@@ -111,15 +111,15 @@ public class PlayerCube : MonoBehaviour
         //Player Rotations
         if (mvmt.x < 0) // Rotate Left
         {
-            transform.localEulerAngles = new Vector3(0, 90, 0);
+            transform.localEulerAngles = new Vector3(0, 75, 0);
         }
         else if (mvmt.x > 0) // Rotate Right
         {
-            transform.localEulerAngles = new Vector3(0, -90, 0);
+            transform.localEulerAngles = new Vector3(0, -75, 0);
         }
         else if(mvmt.x == 0) // Face Forward
         {
-            transform.localEulerAngles = new Vector3(0, 0, 0);
+            //transform.localEulerAngles = new Vector3(0, 0, 0);
         }
 
     }
