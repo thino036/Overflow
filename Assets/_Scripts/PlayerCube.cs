@@ -8,30 +8,41 @@ public class PlayerCube : MonoBehaviour
     public LayerMask obstacleMask;
 
     [Header("Movement Variables")]
-    public float HoMoveSpeed = 5f;
-    public float VeMoveSpeed = 100f;
-
-    private Rigidbody rb;
-    private Vector3 mvmt;
+    [Tooltip("Player's horizontal movement speed.")]
+    public float HoMoveSpeed = 5f;                  // Player's horizontal movement speed.
+    [Tooltip("Player's vertical movement speed.")]
+    public float VeMoveSpeed = 100f;                // Player's vertical movement speed.
 
     [Header("Ice Platform Variables")]
-    public GameObject icePlatformPrefab;
-    public GameObject indicatorPrefab;
-    public float spawnDistance = 10f;
+    [Tooltip("Place prefab for ice platform here.")]
+    public GameObject icePlatformPrefab;            // Prefab for ice platform.
+    [Tooltip("Place prefab for placement indicator here.")]
+    public GameObject indicatorPrefab;              // Indicator prefab.
+    [Tooltip("Distance to spawn ice platform.")]
+    public float spawnDistance = 10f;               // Distance ice platform will spawn.
 
     [Header("Dynamic")]
-    public GameObject indicator;
-    public Vector3 playerPos;
-
-    private Camera mainCam;
+    public GameObject indicator;                    // For indicator prefab.
+    public Vector3 playerPos;                       // Player position.
+    public int playerHealth = 10;                   // Player health.
 
     [Header("Air Variables")]
-    public float maxAir = 100f;
-    public float airDecreaseRate = 10f;
-    public float airIncreaseRate = 5f;
-    public float currentAir;
+    [Tooltip("Player air capacity.")]
+    public float maxAir = 100f;                     // Player's air capacity.
+    [Tooltip("Rate the player loses air.")]
+    public float airDecreaseRate = 10f;             // Rate player's air decreases.
+    [Tooltip("Rate the player can recover air.")]
+    public float airIncreaseRate = 5f;              // Rate player's air increases.
+    [Tooltip("Amount of air player has left.")]
+    public float currentAir;                        // Air player has left.
+    [Tooltip("Place slider for air here.")]
+    public Slider oxygenSlider;                     // Slider for oxygen display
     private bool isUnderwater = false;
-    public Slider oxygenSlider; // Slider for oxygen display
+
+    private Rigidbody rb;                           // Player's rigid body.
+    private Vector3 mvmt;                           // Vector for player movement direction. (Positive means the player is moving right, negative is left)
+    private float healthLossTimer = 0f;             // Timer for player health loss.
+    private Camera mainCam;                         // Camera.
 
     void Start()
     {
@@ -44,7 +55,6 @@ public class PlayerCube : MonoBehaviour
 
         indicator = Instantiate(indicatorPrefab) as GameObject;
         indicator.transform.position = playerPos;
-
         indicator.SetActive(true);
 
         this.GetComponent<SphereCollider>().enabled = false;
@@ -88,18 +98,27 @@ public class PlayerCube : MonoBehaviour
         // Handle oxygen decrease or increase
         if (isUnderwater)
         {
-            currentAir -= airDecreaseRate * Time.deltaTime;
-            currentAir = Mathf.Max(currentAir, 0); // Clamp to 0
+            currentAir -= airDecreaseRate * Time.deltaTime; // Decrease player's air.
+            currentAir = Mathf.Max(currentAir, 0);          // Clamp to 0
 
             if (oxygenSlider != null)
             {
-                oxygenSlider.value = currentAir; // Update slider
+                oxygenSlider.value = currentAir;            // Update slider
             }
 
             if (currentAir <= 0)
             {
                 Debug.Log("Player is out of air!");
-                // Add code for when the player is out of air (e.g., decrease health)
+                healthLossTimer += Time.deltaTime;          // Update health loss timer.
+
+                // Every 1 second decrease the player health by 2.
+                // This means the player will lose all health in 5 seconds.
+                if (healthLossTimer >= 1f)
+                {
+                    playerHealth -= 2;
+                    playerHealth = Mathf.Max(playerHealth, 0);
+                    healthLossTimer = 0f;
+                }
             }
         }
         else
@@ -112,6 +131,8 @@ public class PlayerCube : MonoBehaviour
             {
                 oxygenSlider.value = currentAir; // Update slider
             }
+
+            healthLossTimer = 0f;
         }
 
         if (Input.GetKeyDown(KeyCode.W) && canJump)
