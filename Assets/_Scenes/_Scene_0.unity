@@ -5885,15 +5885,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69af937e123f7bf40a598ecf6bc23006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 0
   HoMoveSpeed: 5
   VeMoveSpeed: 30
   icePlatformPrefab: {fileID: 3257443188705983967, guid: 65bf3f1d225d34e45879a21ab3fd74bd, type: 3}
   indicatorPrefab: {fileID: 4038148510623159781, guid: 9f977fd1db75f034887a7dbe316e3686, type: 3}
   spawnDistance: 2
   iceSound: {fileID: 887473554}
+  platformCooldown: 1
   indicator: {fileID: 0}
   playerPos: {x: 0, y: 0, z: 0}
   playerHealth: 10
@@ -9234,7 +9232,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7604878710201303885, guid: 1f1b5015235fd0a4d8576d9c43c3a69a, type: 3}
       propertyPath: speed
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7604878710201303885, guid: 1f1b5015235fd0a4d8576d9c43c3a69a, type: 3}
       propertyPath: waterBar

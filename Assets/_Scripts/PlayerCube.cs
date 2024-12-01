@@ -5,8 +5,6 @@ using UnityEngine.UI; // For UI Slider support
 
 public class PlayerCube : MonoBehaviour
 {
-    public LayerMask obstacleMask;
-
     [Header("Movement Variables")]
     [Tooltip("Player's horizontal movement speed.")]
     public float HoMoveSpeed = 5f;                  // Player's horizontal movement speed.
@@ -22,6 +20,9 @@ public class PlayerCube : MonoBehaviour
     public float spawnDistance = 10f;               // Distance ice platform will spawn.
     [Tooltip("Audio Source for ice platform placing sound.")]
     public AudioSource iceSound;
+    [Tooltip("Cooldown for placing platforms. (in seconds)")]
+    public float platformCooldown = 1f;
+    private float cooldownTimer;
 
     [Header("Dynamic")]
     public GameObject indicator;                    // For indicator prefab.
@@ -69,10 +70,17 @@ public class PlayerCube : MonoBehaviour
             oxygenSlider.maxValue = maxAir;
             oxygenSlider.value = currentAir;
         }
+
+        cooldownTimer = platformCooldown;
     }
 
     void Update()
     {
+        if (cooldownTimer > 0f)
+        {
+            cooldownTimer -= Time.deltaTime;
+        }
+
         mvmt.x = Input.GetAxisRaw("Horizontal");
         bool canJump = Mathf.Abs(rb.velocity.y) < 0.01f;
 
@@ -92,10 +100,11 @@ public class PlayerCube : MonoBehaviour
         Vector3 placementPos = playerPos + mouseDelta;
         indicator.transform.position = placementPos;
 
-        if (Input.GetMouseButtonDown(0) && CanPlacePlatform(placementPos, GetSize(icePlatformPrefab)))
+        if (Input.GetMouseButtonDown(0) && cooldownTimer <= 0f)
         {
             Instantiate(icePlatformPrefab, placementPos, Quaternion.identity);
             iceSound.Play();
+            cooldownTimer = platformCooldown;
         }
 
         // Handle oxygen decrease or increase
@@ -192,12 +201,6 @@ public class PlayerCube : MonoBehaviour
             isUnderwater = false;
             Debug.Log("Player exited water.");
         }
-    }
-
-    public bool CanPlacePlatform(Vector3 pos, Vector3 platformSize)
-    {
-        Collider[] colliders = Physics.OverlapBox(pos, platformSize / 2, Quaternion.identity, obstacleMask);
-        return colliders.Length == 0;
     }
 
     Vector3 GetSize(GameObject prefab)
