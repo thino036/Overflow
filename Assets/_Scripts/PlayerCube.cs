@@ -41,6 +41,8 @@ public class PlayerCube : MonoBehaviour
     [Tooltip("Place slider for air here.")]
     public Slider oxygenSlider;                     // Slider for oxygen display
     private bool isUnderwater = false;
+    [Tooltip("Place player's head collider here.")]
+    public GameObject playerHead;
 
     private Rigidbody rb;                           // Player's rigid body.
     private Vector3 mvmt;                           // Vector for player movement direction. (Positive means the player is moving right, negative is left)
@@ -185,7 +187,7 @@ public class PlayerCube : MonoBehaviour
     {
         Debug.Log($"Entered Trigger: {collision.name}");
 
-        if (collision.CompareTag("Water"))
+        if (collision.CompareTag("Water") && playerHead.GetComponent<Collider>().bounds.Intersects(collision.bounds))
         {
             isUnderwater = true;
             Debug.Log("Player is underwater.");
@@ -196,7 +198,7 @@ public class PlayerCube : MonoBehaviour
     {
         Debug.Log($"Exited Trigger: {collision.name}");
 
-        if (collision.CompareTag("Water"))
+        if (collision.CompareTag("Water") && !playerHead.GetComponent<Collider>().bounds.Intersects(collision.bounds))
         {
             isUnderwater = false;
             Debug.Log("Player exited water.");
