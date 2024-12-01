@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ice : MonoBehaviour
 {
-    public float lifeTime = 5f;
+    public float lifeTime = 2f;
     private float fadeTime;
     private Material iceMat;
     private Color originalColor;
