@@ -10,6 +10,7 @@ public class PlayerCube : MonoBehaviour
     public float HoMoveSpeed = 5f;                  // Player's horizontal movement speed.
     [Tooltip("Player's vertical movement speed.")]
     public float VeMoveSpeed = 100f;                // Player's vertical movement speed.
+    public float fallMultiplier = 2f;
 
     [Header("Ice Platform Variables")]
     [Tooltip("Place prefab for ice platform here.")]
@@ -194,6 +195,11 @@ public class PlayerCube : MonoBehaviour
             rb.position.y,
             rb.position.z);
         rb.MovePosition(newPos);
+
+        if (rb.velocity.y < 0)
+        {
+            rb.AddForce(Vector3.up * Physics.gravity.y * (fallMultiplier - 1), ForceMode.Acceleration);
+        }
 
         // Update player position so that indicator logic follows position
         playerPos = rb.position;
