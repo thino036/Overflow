@@ -23,6 +23,13 @@ public class PlayerCube : MonoBehaviour
     [Tooltip("Cooldown for placing platforms. (in seconds)")]
     public float platformCooldown = 1f;
     private float cooldownTimer;
+    [Tooltip("Cooldown for refilling platform ammo. (in seconds)")]
+    public float refillCooldown = 3f;
+    private float refillTimer;
+    private bool refill = false;
+    [Tooltip("Max number of ice platforms.")]
+    public const int maxPlatforms = 5;
+    private int platformNumber;
 
     [Header("Dynamic")]
     public GameObject indicator;                    // For indicator prefab.
@@ -73,7 +80,12 @@ public class PlayerCube : MonoBehaviour
             oxygenSlider.value = currentAir;
         }
 
+        // Initialize timers
         cooldownTimer = platformCooldown;
+        refillTimer = refillCooldown;
+
+        // Initialize platform capacity
+        platformNumber = maxPlatforms;
     }
 
     void Update()
@@ -102,11 +114,31 @@ public class PlayerCube : MonoBehaviour
         Vector3 placementPos = playerPos + mouseDelta;
         indicator.transform.position = placementPos;
 
-        if (Input.GetMouseButtonDown(0) && cooldownTimer <= 0f)
+        if (Input.GetMouseButtonDown(0) && cooldownTimer <= 0f && !refill)
         {
             Instantiate(icePlatformPrefab, placementPos, Quaternion.identity);
             iceSound.Play();
             cooldownTimer = platformCooldown;
+            platformNumber--;   // Decrement platform number
+        }
+
+        // Check for platform capacity and reload if needed
+        if(Input.GetKey(KeyCode.R) || platformNumber == 0 || refill)
+        {
+            Debug.Log("reloading");
+            refill = true;
+
+            if (refillTimer > 0f)
+            {
+                refillTimer -= Time.deltaTime;
+            }
+            else
+            {
+                Debug.Log("finished reloading");
+                refillTimer = refillCooldown;   // Reset refill timer
+                platformNumber = maxPlatforms;  // Reset platforms
+                refill = false;
+            }
         }
 
         // Handle oxygen decrease or increase
