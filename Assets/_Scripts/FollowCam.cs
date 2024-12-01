@@ -10,11 +10,16 @@ public class FollowCam : MonoBehaviour
     public Vector2 minXY = Vector2.zero;
 
     [Header("Dynamic")]
-    public float camZ;  // The desired Z pos of the camera
+    public float camDistance;  // The desired Z pos of the camera
 
     void Awake()
     {
-        camZ = this.transform.position.z;
+        if (camDistance == 0)
+        {
+            camDistance = this.transform.position.z;
+        }
+        
+        camDistance = Mathf.Abs(camDistance) * -1;
     }
 
     void FixedUpdate()
@@ -46,7 +51,7 @@ public class FollowCam : MonoBehaviour
         destination.y = Mathf.Max(minXY.y, destination.y);
 
         // Force destination.z to be camZ to keep the camera far enough away
-        destination.z = camZ;
+        destination.z = camDistance;
         // Set the camera to the destination
         transform.position = destination;
         // Set the orthographicSize of the Camera to keep the ground in view
