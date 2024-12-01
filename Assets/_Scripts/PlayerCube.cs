@@ -9,8 +9,19 @@ public class PlayerCube : MonoBehaviour
     [Tooltip("Player's horizontal movement speed.")]
     public float HoMoveSpeed = 5f;                  // Player's horizontal movement speed.
     [Tooltip("Player's vertical movement speed.")]
-    public float VeMoveSpeed = 100f;                // Player's vertical movement speed.
+    public float VeMoveSpeed = 50f;                // Player's vertical movement speed.
     public float fallMultiplier = 2f;
+    [Tooltip("Gravity out of water.")]
+    public Vector3 grav = new Vector3(0.0f, -8.0f, 0.0f);
+
+    [Header("Underwater Movement Variables")]
+    [Tooltip("Player's horizontal movement speed.")]
+    public float HoWaterMoveSpeed = 3f;
+    [Tooltip("Player's vertical movement speed.")]
+    public float VeWaterMoveSpeed = 30;
+    [Tooltip("Gravity in water.")]
+    public Vector3 waterGrav = new Vector3(0.0f, 0.0f, 0.0f);
+
 
     [Header("Ice Platform Variables")]
     [Tooltip("Place prefab for ice platform here.")]
@@ -113,11 +124,17 @@ public class PlayerCube : MonoBehaviour
         Vector3 gunDelta = mousePos3D - playerPos;
         // Limit mouseDelta to radius of SphereCollider
         float maxMagnitude = this.GetComponent<SphereCollider>().radius;
-        float maxGunMagnitude = this.GetComponent<SphereCollider>().radius - 2.2f;
+        float minMagnitude = this.GetComponent<SphereCollider>().radius - 0.8f;
+        float maxGunMagnitude = this.GetComponent<SphereCollider>().radius - 2.5f;
         if (mouseDelta.magnitude > maxMagnitude)
         {
             mouseDelta.Normalize();
             mouseDelta *= maxMagnitude;
+        }
+        else if (mouseDelta.magnitude < minMagnitude)
+        {
+            mouseDelta.Normalize();
+            mouseDelta *= minMagnitude;
         }
         if (gunDelta.magnitude > maxGunMagnitude || gunDelta.magnitude < maxGunMagnitude)
         {
@@ -127,8 +144,12 @@ public class PlayerCube : MonoBehaviour
         Vector3 placementPos = playerPos + mouseDelta;
         indicator.transform.position = placementPos;
         gunPrefab.transform.position = playerPos + gunDelta;
+        gunPrefab.transform.position += Vector3.back * 3.0f;
 
-        // Take mouse location, take player location, get vector between spots, use for gun rotation
+        // DO NOT TOUCH THIS CODE - DETERMINES GUN ROTATION CORRECTLY
+        Vector3 aimDirection = (mousePos3D - playerPos).normalized;
+        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg - 180.0f;
+        gunPrefab.transform.rotation = Quaternion.Euler(angle, -90.0f, 180.0f);
 
         if (Input.GetMouseButtonDown(0) && cooldownTimer <= 0f && !refill)
         {
@@ -205,11 +226,23 @@ public class PlayerCube : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 newPos = new Vector3(
-            rb.position.x + mvmt.x * HoMoveSpeed * Time.fixedDeltaTime,
-            rb.position.y,
-            rb.position.z);
-        rb.MovePosition(newPos);
+        // Player Movement
+        if (isUnderwater)
+        {
+            Vector3 newPos = new Vector3(
+                rb.position.x + mvmt.x * HoWaterMoveSpeed * Time.fixedDeltaTime,
+                rb.position.y,
+                rb.position.z);
+            rb.MovePosition(newPos);
+        } else
+        {
+            Vector3 newPos = new Vector3(
+                        rb.position.x + mvmt.x * HoMoveSpeed * Time.fixedDeltaTime,
+                        rb.position.y,
+                        rb.position.z);
+            rb.MovePosition(newPos);
+        }
+
 
         if (rb.velocity.y < 0)
         {
@@ -243,6 +276,7 @@ public class PlayerCube : MonoBehaviour
         if (collision.CompareTag("Water") && playerHead.GetComponent<Collider>().bounds.Intersects(collision.bounds))
         {
             isUnderwater = true;
+            Physics.gravity = waterGrav;
             Debug.Log("Player is underwater.");
         }
     }
@@ -254,6 +288,7 @@ public class PlayerCube : MonoBehaviour
         if (collision.CompareTag("Water") && !playerHead.GetComponent<Collider>().bounds.Intersects(collision.bounds))
         {
             isUnderwater = false;
+            Physics.gravity = grav;
             Debug.Log("Player exited water.");
         }
     }
@@ -274,6 +309,13 @@ public class PlayerCube : MonoBehaviour
     void Jump()
     {
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-        rb.AddForce(Vector3.up * VeMoveSpeed, ForceMode.Impulse);
+
+        if (isUnderwater)
+        {
+            rb.AddForce(Vector3.up * VeWaterMoveSpeed, ForceMode.Impulse);
+        } else
+        {
+            rb.AddForce(Vector3.up * VeMoveSpeed, ForceMode.Impulse);
+        }
     }
 }

@@ -7016,14 +7016,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoMoveSpeed: 5
-  VeMoveSpeed: 30
+  VeMoveSpeed: 40
   fallMultiplier: 2
+  grav: {x: 0, y: -9, z: 0}
+  HoWaterMoveSpeed: 3
+  VeWaterMoveSpeed: 24
+  waterGrav: {x: 0, y: -2, z: 0}
   icePlatformPrefab: {fileID: 3257443188705983967, guid: 65bf3f1d225d34e45879a21ab3fd74bd, type: 3}
   indicatorPrefab: {fileID: 4038148510623159781, guid: 9f977fd1db75f034887a7dbe316e3686, type: 3}
   spawnDistance: 2
   iceSound: {fileID: 887473554}
-  platformCooldown: 1
-  refillCooldown: 3
+  platformCooldown: 0.5
+  refillCooldown: 2.5
   gunPrefab: {fileID: 3312936910703615877, guid: becbc8831bf37dd45a491f2b98997a92, type: 3}
   indicator: {fileID: 0}
   playerPos: {x: 0, y: 0, z: 0}
