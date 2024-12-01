@@ -103,6 +103,9 @@ public class PlayerCube : MonoBehaviour
 
         // Initialize platform capacity
         platformNumber = maxPlatforms;
+
+        // Initialize out of water gravity
+        Physics.gravity = grav;
     }
 
     void Update()
