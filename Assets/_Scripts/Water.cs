@@ -9,6 +9,7 @@ public class Water : MonoBehaviour
     public Slider waterBar;
     public float speed = 1f;
     public float maxWaterHeight = 10f;
+    public float levelHeight = 50f;
     public float sliderSpeed = 0.8f;
 
     private float currentWaterLevel = 0f;
@@ -16,7 +17,10 @@ public class Water : MonoBehaviour
 
     void Start()
     {
-        // SLider's starting value and range matches the water level
+        // Dynamically match the water bar to the level height
+        maxWaterHeight = levelHeight;
+
+        // Slider's starting value and range matches the water level
         if (waterBar != null)
         {
             waterBar.maxValue = maxWaterHeight;
@@ -31,9 +35,9 @@ public class Water : MonoBehaviour
         {
             currentWaterLevel += speed * Time.deltaTime;
 
-            // Update the water's scale
+            // Update the water's scale to match the full level height
             Vector3 scale = transform.localScale;
-            scale.y = currentWaterLevel;
+            scale.y = (currentWaterLevel / maxWaterHeight) * levelHeight;
             transform.localScale = scale;
 
             // Update the Slider value
