@@ -31,6 +31,8 @@ public class PlayerCube : MonoBehaviour
     [Tooltip("Max number of ice platforms.")]
     public const int maxPlatforms = 5;
     private int platformNumber;
+    [Tooltip("Gun Prefab")]
+    public GameObject gunPrefab;
 
     [Header("Dynamic")]
     public GameObject indicator;                    // For indicator prefab.
@@ -67,8 +69,11 @@ public class PlayerCube : MonoBehaviour
         playerPos = transform.position;
 
         indicator = Instantiate(indicatorPrefab) as GameObject;
+        gunPrefab = Instantiate(gunPrefab) as GameObject;
         indicator.transform.position = playerPos;
+        gunPrefab.transform.position = playerPos;
         indicator.SetActive(true);
+        gunPrefab.SetActive(true);
 
         this.GetComponent<SphereCollider>().enabled = false;
 
@@ -99,21 +104,31 @@ public class PlayerCube : MonoBehaviour
         mvmt.x = Input.GetAxisRaw("Horizontal");
         bool canJump = Mathf.Abs(rb.velocity.y) < 0.01f;
 
-        // Display indicator
+        // Display indicator and gun
         Vector3 mousePos2D = Input.mousePosition;
         mousePos2D.z = -mainCam.transform.position.z;
         Vector3 mousePos3D = mainCam.ScreenToWorldPoint(mousePos2D);
 
         Vector3 mouseDelta = mousePos3D - playerPos;
+        Vector3 gunDelta = mousePos3D - playerPos;
         // Limit mouseDelta to radius of SphereCollider
         float maxMagnitude = this.GetComponent<SphereCollider>().radius;
+        float maxGunMagnitude = this.GetComponent<SphereCollider>().radius - 2.2f;
         if (mouseDelta.magnitude > maxMagnitude)
         {
             mouseDelta.Normalize();
             mouseDelta *= maxMagnitude;
         }
+        if (gunDelta.magnitude > maxGunMagnitude || gunDelta.magnitude < maxGunMagnitude)
+        {
+            gunDelta.Normalize();
+            gunDelta *= maxGunMagnitude;
+        }
         Vector3 placementPos = playerPos + mouseDelta;
         indicator.transform.position = placementPos;
+        gunPrefab.transform.position = playerPos + gunDelta;
+
+        // Take mouse location, take player location, get vector between spots, use for gun rotation
 
         if (Input.GetMouseButtonDown(0) && cooldownTimer <= 0f && !refill)
         {
