@@ -19,7 +19,7 @@ public class PlayerDot : MonoBehaviour
             // Move the PlayerDot proportionally on the slider
             playerDot.anchoredPosition = new Vector2(
                 playerDot.anchoredPosition.x,
-                Mathf.Clamp(normalizedY * sliderHeight, 0, sliderHeight)
+                Mathf.Clamp(normalizedY * sliderHeight, 0, sliderHeight) * 2
             );
         }
     }
