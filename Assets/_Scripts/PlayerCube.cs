@@ -194,7 +194,7 @@ public class PlayerCube : MonoBehaviour
 
             if (oxygenSlider != null)
             {
-                oxygenSlider.value = currentAir;            // Update slider
+                oxygenSlider.value = Mathf.Clamp(currentAir, 0, maxAir);            // Update slider
             }
 
             if (currentAir <= 0)
