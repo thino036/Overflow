@@ -43,7 +43,7 @@ public class Water : MonoBehaviour
             // Update the Slider value
             if (waterBar != null)
             {
-                displayedWaterLevel = Mathf.Lerp(displayedWaterLevel, currentWaterLevel, sliderSpeed * Time.deltaTime);
+                displayedWaterLevel = Mathf.Lerp(displayedWaterLevel, currentWaterLevel*1.15f, sliderSpeed * Time.deltaTime);
                 waterBar.value = displayedWaterLevel;
             }
         }
