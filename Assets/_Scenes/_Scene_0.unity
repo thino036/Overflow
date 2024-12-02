@@ -9058,7 +9058,7 @@ Transform:
   m_LocalScale: {x: 3.19455, y: 0.164362, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1041414422 stripped
 Transform:
@@ -12066,7 +12066,7 @@ MonoBehaviour:
   VeMoveSpeed: 40
   fallMultiplier: 2
   grav: {x: 0, y: -9, z: 0}
-  HoWaterMoveSpeed: 3
+  HoWaterMoveSpeed: 3.5
   VeWaterMoveSpeed: 24
   waterGrav: {x: 0, y: -2, z: 0}
   icePlatformPrefab: {fileID: 3257443188705983967, guid: 65bf3f1d225d34e45879a21ab3fd74bd, type: 3}
@@ -12079,7 +12079,7 @@ MonoBehaviour:
   gunPrefab: {fileID: 3312936910703615877, guid: becbc8831bf37dd45a491f2b98997a92, type: 3}
   indicator: {fileID: 0}
   playerPos: {x: 0, y: 0, z: 0}
-  playerHealth: 10
+  playerHealth: 30
   maxAir: 100
   airDecreaseRate: 10
   airIncreaseRate: 5
@@ -18642,7 +18642,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2106429487
 MonoBehaviour:
@@ -18929,7 +18929,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7604878710201303885, guid: 1f1b5015235fd0a4d8576d9c43c3a69a, type: 3}
       propertyPath: speed
-      value: 2.2
+      value: 3.75
       objectReference: {fileID: 0}
     - target: {fileID: 7604878710201303885, guid: 1f1b5015235fd0a4d8576d9c43c3a69a, type: 3}
       propertyPath: waterBar
