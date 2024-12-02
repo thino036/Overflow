@@ -44,7 +44,7 @@ public class PlayerCube : MonoBehaviour
     private bool refill = false;
     [Tooltip("Max number of ice platforms.")]
     public const int maxPlatforms = 5;
-    private int platformNumber;
+    public int platformNumber;
     [Tooltip("Gun Prefab")]
     public GameObject gunPrefab;
 
