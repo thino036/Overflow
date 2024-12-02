@@ -15367,7 +15367,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7604878710201303885, guid: 1f1b5015235fd0a4d8576d9c43c3a69a, type: 3}
       propertyPath: speed
-      value: 2
+      value: 2.2
       objectReference: {fileID: 0}
     - target: {fileID: 7604878710201303885, guid: 1f1b5015235fd0a4d8576d9c43c3a69a, type: 3}
       propertyPath: waterBar
