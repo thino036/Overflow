@@ -7123,8 +7123,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EndGameCanvas: {fileID: 1793830069}
+  EndGameText: {fileID: 552727150}
   timer: {fileID: 2106429485}
   UICanvas: {fileID: 1197734807}
+  gameover: 0
 --- !u!65 &1028690952
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9642,6 +9644,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d417922f0058fb342a076d9d0c16e3e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1364043655}
+  goal: {fileID: 1028690951}
 --- !u!95 &1327022108
 Animator:
   serializedVersion: 5
@@ -9946,6 +9950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69af937e123f7bf40a598ecf6bc23006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAlive: 1
   HoMoveSpeed: 5
   VeMoveSpeed: 40
   fallMultiplier: 2
@@ -9970,6 +9975,7 @@ MonoBehaviour:
   oxygenSlider: {fileID: 1275535242}
   playerHead: {fileID: 1543550926}
   EndGameCanvas: {fileID: 1793830069}
+  EndGameText: {fileID: 552727150}
   UICanvas: {fileID: 1197734807}
 --- !u!65 &1364043656
 BoxCollider:
