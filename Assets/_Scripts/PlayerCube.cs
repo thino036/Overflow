@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerCube : MonoBehaviour
 {
+    public bool isAlive = true;
+
     [Header("Movement Variables")]
     [Tooltip("Player's horizontal movement speed.")]
     public float HoMoveSpeed = 5f;                  // Player's horizontal movement speed.
@@ -67,6 +69,7 @@ public class PlayerCube : MonoBehaviour
     public GameObject playerHead;
 
     public GameObject EndGameCanvas;
+    public Text EndGameText;
     public GameObject UICanvas;
 
     private Rigidbody rb;                           // Player's rigid body.
@@ -93,6 +96,7 @@ public class PlayerCube : MonoBehaviour
         this.GetComponent<SphereCollider>().enabled = false;
 
         currentAir = maxAir;
+        isAlive = true;
 
         // Initialize oxygen slider
         if (oxygenSlider != null)
@@ -194,7 +198,7 @@ public class PlayerCube : MonoBehaviour
 
             if (oxygenSlider != null)
             {
-                oxygenSlider.value = currentAir;            // Update slider
+                oxygenSlider.value = Mathf.Clamp(currentAir, 0, maxAir);            // Update slider
             }
 
             if (currentAir <= 0)
@@ -233,10 +237,12 @@ public class PlayerCube : MonoBehaviour
 
         if (playerHealth <= 0)
         {
+            EndGameText.text = "Level Failed";
             EndGameCanvas.SetActive(true);
             Time.timeScale = 0f;
             UICanvas.SetActive(false);
             playerHealth = 10;
+            isAlive = false;
         }
     }
 
