@@ -8,7 +8,7 @@ public class Water : MonoBehaviour
     public GameObject waterPrefab;
     public Slider waterBar;
     public float speed = 1f;
-    public float maxWaterHeight = 10f;
+    public float maxWaterHeight = 200f;
     public float levelHeight = 50f;
     public float sliderSpeed = 0.8f;
 
@@ -18,7 +18,7 @@ public class Water : MonoBehaviour
     void Start()
     {
         // Dynamically match the water bar to the level height
-        maxWaterHeight = levelHeight;
+        //maxWaterHeight = levelHeight;
 
         // Slider's starting value and range matches the water level
         if (waterBar != null)
