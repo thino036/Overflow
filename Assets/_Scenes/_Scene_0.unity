@@ -8154,6 +8154,8 @@ MonoBehaviour:
   currentAir: 0
   oxygenSlider: {fileID: 1275535242}
   playerHead: {fileID: 1543550926}
+  EndGameCanvas: {fileID: 1793830069}
+  UICanvas: {fileID: 1197734807}
 --- !u!65 &1364043656
 BoxCollider:
   m_ObjectHideFlags: 0

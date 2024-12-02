@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; // For UI Slider support
+using UnityEngine.SceneManagement;
 
 public class PlayerCube : MonoBehaviour
 {
@@ -64,6 +65,9 @@ public class PlayerCube : MonoBehaviour
     private bool isUnderwater = false;
     [Tooltip("Place player's head collider here.")]
     public GameObject playerHead;
+
+    public GameObject EndGameCanvas;
+    public GameObject UICanvas;
 
     private Rigidbody rb;                           // Player's rigid body.
     private Vector3 mvmt;                           // Vector for player movement direction. (Positive means the player is moving right, negative is left)
@@ -152,7 +156,8 @@ public class PlayerCube : MonoBehaviour
         // DO NOT TOUCH THIS CODE - DETERMINES GUN ROTATION CORRECTLY
         Vector3 aimDirection = (mousePos3D - playerPos).normalized;
         float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg - 180.0f;
-        gunPrefab.transform.rotation = Quaternion.Euler(angle, -90.0f, 180.0f);
+        gunPrefab.transform.rotation = Quaternion.Euler(angle, -90f, 180f);
+            
 
         if (Input.GetMouseButtonDown(0) && cooldownTimer <= 0f && !refill)
         {
@@ -224,6 +229,14 @@ public class PlayerCube : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W) && canJump)
         {
             Jump();
+        }
+
+        if (playerHealth <= 0)
+        {
+            EndGameCanvas.SetActive(true);
+            Time.timeScale = 0f;
+            UICanvas.SetActive(false);
+            playerHealth = 10;
         }
     }
 
